@@ -1,73 +1,113 @@
 <!DOCTYPE html>
 <html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Bản đồ kiến thức của bé — seasea</title>
+<title>Bản đồ nơ-ron của bé — seasea</title>
 <style>
-*{box-sizing:border-box} body{margin:0;background:#0b1026;color:#eef2ff;font-family:system-ui,-apple-system,sans-serif}
-header{padding:14px 16px 8px} h1{margin:0 0 6px;font-size:22px} p.sub{margin:0;color:#a5b4fc;font-size:14px;line-height:1.5}
-#userbox{background:#1e293b;border:1px solid #334155;border-radius:14px;padding:12px;margin:12px 16px}
-#userbox input{font-size:16px;padding:8px;border-radius:10px;border:1px solid #64748b;width:62%;background:#0f172a;color:#fff}
-button{font-size:15px;padding:8px 12px;margin:3px;border-radius:10px;border:1px solid #64748b;background:#1e293b;color:#fff;cursor:pointer}
-button.on{background:#4f46e5;border-color:#818cf8}
-#filters{padding:0 16px;display:flex;flex-wrap:wrap;gap:6px} #filters button{font-size:13px;padding:6px 10px}
-#search{margin:10px 16px 0;width:calc(100% - 32px);font-size:16px;padding:9px;border-radius:10px;border:1px solid #64748b;background:#0f172a;color:#fff}
-#wrap{position:relative;margin:12px 16px;border:1px solid #334155;border-radius:16px;overflow:hidden;background:radial-gradient(circle at 50% 30%,#16204d 0,#0b1026 70%)}
-canvas{display:block;width:100%;height:62vh;min-height:420px;touch-action:manipulation}
-#hint{position:absolute;left:10px;bottom:10px;background:rgba(15,23,42,.85);border:1px solid #334155;border-radius:10px;padding:6px 10px;font-size:13px;color:#cbd5e1}
-#panel{margin:0 16px 16px;background:#1e293b;border:1px solid #334155;border-radius:16px;padding:14px}
-#panel h2{margin:0 0 6px;font-size:19px} #panel p{margin:6px 0;line-height:1.55;color:#e2e8f0}
-#panel .tag{display:inline-block;background:#312e81;border-radius:8px;padding:2px 8px;margin-right:6px;font-size:13px}
-#panel a.big{display:inline-block;margin-top:8px;background:#4f46e5;color:#fff;text-decoration:none;padding:10px 16px;border-radius:12px;font-weight:600}
-#panel a.big.disabled{background:#475569;pointer-events:none}
-#legend{padding:0 16px 12px;font-size:13px;color:#cbd5e1;line-height:1.8}
-#legend i{display:inline-block;width:11px;height:11px;border-radius:50%;margin:0 4px 0 10px;vertical-align:middle}
-a{color:#a5b4fc} .foot{padding:0 16px 20px;color:#94a3b8;font-size:13px;line-height:1.6}
+*{box-sizing:border-box} body{margin:0;background:linear-gradient(#aee6ff,#fff3c4 55%,#d8f7d8);color:#263238;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+header{padding:16px 16px 6px;text-align:center} h1{margin:0 0 6px;font-size:28px} p.sub{margin:0 auto;max-width:680px;color:#37474f;font-size:16px;line-height:1.55}
+#userbox{background:#fff;border:3px solid #ffca28;border-radius:22px;padding:14px;margin:12px 16px;box-shadow:0 6px 16px rgba(0,0,0,.12)}
+#userbox input{font-size:18px;padding:10px;border-radius:14px;border:2px solid #81d4fa;width:62%;background:#fff}
+button{font-size:16px;padding:10px 14px;margin:3px;border-radius:18px;border:2px solid #ff9f43;background:#fff;color:#263238;cursor:pointer;box-shadow:0 3px 0 #ff9f43}button:active{transform:translateY(2px);box-shadow:none}
+button.on{background:#ffca28;border-color:#f57f17}
+#mascotBar{display:flex;align-items:center;gap:10px;background:#fff;border:3px solid #81d4fa;border-radius:22px;padding:10px 14px;margin:12px 16px;box-shadow:0 6px 16px rgba(0,0,0,.10)}
+#mascotFace{font-size:44px}#mascotBubble{flex:1;font-size:17px;line-height:1.5;background:#e3f2fd;border-radius:16px;padding:10px 12px}
+#filters{padding:0 16px;display:flex;flex-wrap:wrap;gap:6px;justify-content:center} #filters button{font-size:14px;padding:8px 12px}
+#search{margin:12px 16px 0;width:calc(100% - 32px);font-size:18px;padding:11px;border-radius:16px;border:2px solid #81d4fa;background:#fff}
+#wrap{position:relative;margin:12px 16px;border:3px solid #fff;border-radius:24px;overflow:hidden;background:linear-gradient(#7dd3fc,#e0f2fe 60%,#bbf7d0);box-shadow:0 8px 20px rgba(0,0,0,.15)}
+canvas{display:block;width:100%;height:64vh;min-height:440px;touch-action:manipulation}
+#hint{position:absolute;left:10px;bottom:10px;background:rgba(255,255,255,.92);border:2px solid #ffca28;border-radius:12px;padding:7px 11px;font-size:14px}
+#panel{margin:0 16px 16px;background:#fff;border:3px solid #ffca28;border-radius:24px;padding:16px;box-shadow:0 6px 16px rgba(0,0,0,.12)}
+#panel h2{margin:0 0 6px;font-size:22px} #panel p{margin:6px 0;line-height:1.6;font-size:16px}
+#panel .tag{display:inline-block;background:#e3f2fd;border-radius:10px;padding:3px 10px;margin-right:6px;font-size:14px;font-weight:600}
+#panel a.big{display:inline-block;margin-top:8px;background:#ff7043;color:#fff;text-decoration:none;padding:12px 20px;border-radius:20px;font-weight:700;font-size:18px;box-shadow:0 4px 0 #e64a19}
+#panel a.big.disabled{background:#b0bec5;box-shadow:none;pointer-events:none}
+#legend{padding:0 16px 12px;font-size:14px;line-height:1.9;text-align:center}
+#legend i{display:inline-block;width:13px;height:13px;border-radius:50%;margin:0 4px 0 10px;vertical-align:middle}
+a{color:#1565c0} .foot{padding:0 16px 24px;color:#546e7a;font-size:14px;line-height:1.6;text-align:center}
+#overlay{position:fixed;inset:0;background:rgba(3,60,90,.88);z-index:100;display:flex;align-items:center;justify-content:center;padding:16px}
+#overlayBox{background:#fff;border-radius:28px;padding:22px;max-width:640px;width:100%;text-align:center;box-shadow:0 12px 30px rgba(0,0,0,.35)}
+#overlayBox h2{font-size:26px;margin:0 0 8px}#mascotGrid{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:16px 0}
+.mascotCard{width:150px;border:3px solid #81d4fa;border-radius:22px;padding:12px;background:#e3f2fd;cursor:pointer}
+.mascotCard .emo{font-size:52px}.mascotCard b{display:block;font-size:16px;margin-top:6px}.mascotCard small{color:#546e7a}
+#progressBar{height:22px;background:#e0e0e0;border-radius:12px;overflow:hidden;margin-top:8px}#progressFill{height:100%;background:linear-gradient(90deg,#ffca28,#ff7043);width:0%}
 </style></head><body>
-<header><h1>🌌 Bản đồ kiến thức của bé</h1>
-<p class="sub">Mỗi chấm là một bài học. Đường nối là kiến thức cần học trước. Bấm vào một chấm để xem bài đó, và xem nó nối với những bài nào. Dành cho bé 5 tuổi trước, các độ tuổi khác sẽ thêm vào cùng một bản đồ này.</p></header>
+<header><h1>🌈🗺️ Bản đồ nơ-ron của bé</h1>
+<p class="sub">Mỗi chấm là một bài học vui! Đường nối là kiến thức cần học trước. Bấm vào một chấm để khám phá bài đó nhé!</p></header>
 <div id="userbox"><p id="greet" style="margin:0 0 8px"><b>Chào bé! Bé tên gì?</b></p>
-<input id="username" placeholder="Nhập tên của bé, ví dụ: An"><button onclick="saveUser()">Vào học</button><button onclick="changeUser()" id="changeBtn" style="display:none">Đổi tên</button>
-<p id="progress" style="margin:8px 0 0;color:#cbd5e1"></p>
-<p style="font-size:13px;color:#94a3b8;margin:8px 0 0">Tên chỉ lưu trên máy của bé, không gửi đi đâu, không cần mật khẩu hay email.</p></div>
+<input id="username" placeholder="Nhập tên của bé, ví dụ: An"><button onclick="saveUser()">Vào học 🎉</button><button onclick="changeUser()" id="changeBtn" style="display:none">Đổi tên</button>
+<button onclick="toggleMute()" id="muteBtn2">🔊 Bật tiếng</button><button onclick="changeMascot()">Đổi bạn đồng hành</button>
+<p id="progress" style="margin:10px 0 0;font-size:17px"></p><div id="progressBar"><div id="progressFill"></div></div>
+<p style="font-size:13px;color:#78909c;margin:8px 0 0">Tên và bạn đồng hành chỉ lưu trên máy của bé, không gửi đi đâu, không cần mật khẩu hay email.</p></div>
+<div id="mascotBar"><div id="mascotFace">⭐</div><div id="mascotBubble">Chào bé! Mình là bạn đồng hành của bé. Bấm vào một chấm sáng để bắt đầu khám phá nhé!</div></div>
 <div id="filters"></div>
 <input id="search" placeholder="Tìm bài học, ví dụ: nước, hình tròn, con vật…">
-<div id="wrap"><canvas id="cv"></canvas><div id="hint">Chạm vào một chấm để chọn • Kéo để xem quanh bản đồ • Dùng nút môn học để lọc</div></div>
-<div id="panel"><h2 id="pTitle">Chạm vào một chấm để bắt đầu</h2>
-<p id="pMeta"></p><p id="pDesc">Bản đồ có 347 bài cho bé 5 tuổi và 468 đường nối kiến thức cần học trước. Bài nào bé đã trả lời đúng sẽ hiện dấu ✓ và chấm chuyển màu xanh lá.</p>
+<div id="wrap"><canvas id="cv"></canvas><div id="hint">👆 Chạm vào một chấm để chọn • Kéo để xem quanh bản đồ • Dùng nút môn học để lọc</div></div>
+<div id="panel"><h2 id="pTitle">Chạm vào một chấm để bắt đầu khám phá!</h2>
+<p id="pMeta"></p><p id="pDesc">Bản đồ có 347 bài cho bé 5 tuổi và 468 đường nối kiến thức cần học trước. Bài nào bé đã trả lời đúng sẽ hiện dấu ✓ và chấm chuyển màu xanh lá, kèm ngôi sao.</p>
 <p id="pLinks"></p><a id="pGo" class="big disabled" href="#">Vào học bài này →</a>
-<button onclick="markDone()" id="doneBtn" style="display:none">✓ Đánh dấu đã học xong</button></div>
+<button onclick="markDone()" id="doneBtn" style="display:none">⭐ Đánh dấu đã học xong</button></div>
 <div id="legend"></div>
 <p class="foot"><a href="list.html">Xem dạng danh sách cho phụ huynh →</a> • Bài học lấy từ Marble Skill Taxonomy v1, đã dịch sang tiếng Việt. Các độ tuổi lớn hơn sẽ thêm vào bản đồ này sau, không làm lại giao diện.</p>
+<div id="overlay" style="display:none"><div id="overlayBox"><h2>🎉 Chào bé! Bé muốn ai đồng hành cùng mình?</h2>
+<p style="font-size:17px;line-height:1.6">Chọn một bạn nhé! Bạn này sẽ chào bé, cổ vũ bé và đọc tên bài học cho bé nghe. Các bạn này đều là nhân vật gốc, do chúng mình tự nghĩ ra, không phải nhân vật trong phim hay truyện có bản quyền.</p>
+<div id="mascotGrid"></div>
+<p style="color:#78909c;font-size:14px">Bé có thể đổi bạn đồng hành bất cứ lúc nào bằng nút “Đổi bạn đồng hành” ở trên.</p></div></div>
 <script>
-let DATA=null, sel=null, filter='Tất cả', q='', view={x:0,y:0,s:1}, drag=null, lastTap=0;
+var MASCOTS=[
+ {id:'mimi',emo:'\U0001f431',name:'Mèo Cam Mimi',note:'Mèo cam tinh nghịch, thích khám phá'},
+ {id:'bong',emo:'\U0001f436',name:'Chó Vàng Bông',note:'Chó vàng trung thành, luôn cổ vũ bé'},
+ {id:'tuyet',emo:'\U0001f430',name:'Thỏ Trắng Tuyết',note:'Thỏ trắng nhanh nhẹn, thích nhảy nhót'},
+ {id:'mat',emo:'\U0001f43b',name:'Gấu Nâu Mật',note:'Gấu nâu hiền lành, thích mật ong và sách'},
+ {id:'dino',emo:'\U0001f995',name:'Khủng Long Xanh Dino',note:'Khủng long xanh vui vẻ, thích phiêu lưu'},
+ {id:'saonhi',emo:'\u2b50',name:'Sao Nhí',note:'Anh hùng ngôi sao với áo choàng sao, bay khắp bầu trời kiến thức'}
+];
+var CHEERS=['Tuyệt vời! Bé giỏi quá!','Wow! Bé khám phá giỏi thật!','Hay quá! Cùng khám phá chấm tiếp theo nào!','Bé làm được rồi! Sao Nhí và các bạn tự hào về bé!','Cố lên nhé, bé đang đi rất xa trên bản đồ rồi!'];
+let DATA=null, sel=null, filter='Tất cả', q='', view={x:0,y:0,s:1}, drag=null, t0=performance.now();
 const cv=document.getElementById('cv'), ctx=cv.getContext('2d');
 function getUser(){return localStorage.getItem('seasea_user')||localStorage.getItem('harnessi_user')||''}
-function doneSet(){try{return new Set(JSON.parse(localStorage.getItem('seasea_done_'+getUser())||'[]'))}catch(e){return new Set()}}
-function saveUser(){const v=document.getElementById('username').value.trim();if(!v){alert('Bé nhập tên trước nhé!');return}localStorage.setItem('seasea_user',v);renderUser();draw()}
-function changeUser(){localStorage.removeItem('seasea_user');localStorage.removeItem('harnessi_user');renderUser();draw()}
-function renderUser(){const u=getUser(),g=document.getElementById('greet'),inp=document.getElementById('username'),ch=document.getElementById('changeBtn'),pr=document.getElementById('progress');
- if(u){g.innerHTML='Xin chào, <b>'+u.replace(/</g,'&lt;')+'</b>!';inp.style.display='none';ch.style.display='inline-block';pr.textContent='Tiến độ của '+u+': '+doneSet().size+'/347 bài đã học xong.'}
- else{g.innerHTML='<b>Chào bé! Bé tên gì?</b>';inp.style.display='inline-block';inp.value='';ch.style.display='none';pr.textContent='';}}
-function markDone(){if(!sel)return;const k='seasea_done_'+getUser();let d=[];try{d=JSON.parse(localStorage.getItem(k)||'[]')}catch(e){}if(d.indexOf(sel.id)<0)d.push(sel.id);localStorage.setItem(k,JSON.stringify(d));renderUser();draw();show(sel)}
+function doneSet(){try{var a=JSON.parse(localStorage.getItem('seasea_done_'+getUser())||'[]');var b=JSON.parse(localStorage.getItem('harnessi_done_'+getUser())||'[]');return new Set(a.concat(b));}catch(e){return new Set()}}
+function saveUser(){const v=document.getElementById('username').value.trim();if(!v){alert('Bé nhập tên trước nhé!');return}localStorage.setItem('seasea_user',v);renderUser();draw();ensureMascot();}
+function changeUser(){localStorage.removeItem('seasea_user');localStorage.removeItem('harnessi_user');renderUser();draw();}
+function isMuted(){return localStorage.getItem('seasea_muted')==='1';}
+function toggleMute(){localStorage.setItem('seasea_muted',isMuted()?'0':'1');renderMute();}
+function renderMute(){var b=document.getElementById('muteBtn2');if(b)b.textContent=isMuted()?'\U0001f507 Tắt tiếng':'\U0001f50a Bật tiếng';}
+function tone(freq,dur,type,vol,when){try{if(isMuted())return;var AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;window._ac=window._ac||new AC();var ac=window._ac;var o=ac.createOscillator(),g=ac.createGain();o.type=type||'sine';o.frequency.value=freq;g.gain.setValueAtTime(vol||0.15,ac.currentTime+(when||0));g.gain.exponentialRampToValueAtTime(0.001,ac.currentTime+(when||0)+dur);o.connect(g);g.connect(ac.destination);o.start(ac.currentTime+(when||0));o.stop(ac.currentTime+(when||0)+dur);}catch(e){}}
+function playPop(){tone(600,0.08,'triangle',0.12);tone(900,0.08,'triangle',0.10,0.05);}
+function playDing(){tone(880,0.25,'sine',0.18);tone(1320,0.35,'sine',0.15,0.12);}
+function getMascot(){var id=localStorage.getItem('seasea_mascot')||'';return MASCOTS.find(function(m){return m.id===id})||null;}
+function renderMascot(){var m=getMascot();document.getElementById('mascotFace').textContent=m?m.emo:'⭐';}
+function sayCheer(){var m=getMascot();var txt=CHEERS[Math.floor(Math.random()*CHEERS.length)];document.getElementById('mascotBubble').textContent=(m?m.name+' nói: ':'')+'"'+txt+'"';}
+function ensureMascot(){if(!getMascot()){document.getElementById('overlay').style.display='flex';}else{document.getElementById('overlay').style.display='none';}}
+function chooseMascot(id){localStorage.setItem('seasea_mascot',id);renderMascot();ensureMascot();playPop();sayCheer();}
+function changeMascot(){document.getElementById('overlay').style.display='flex';}
+function renderUser(){const u=getUser(),g=document.getElementById('greet'),inp=document.getElementById('username'),ch=document.getElementById('changeBtn'),pr=document.getElementById('progress'),fill=document.getElementById('progressFill');
+ var n=doneSet().size;
+ if(u){g.innerHTML='Xin chào, <b>'+u.replace(/</g,'&lt;')+'</b>! 🌟';inp.style.display='none';ch.style.display='inline-block';pr.textContent='⭐ '+u+' đã thu thập '+n+'/347 ngôi sao!';fill.style.width=(n/347*100)+'%';}
+ else{g.innerHTML='<b>Chào bé! Bé tên gì?</b>';inp.style.display='inline-block';inp.value='';ch.style.display='none';pr.textContent='';fill.style.width='0%';}}
+function markDone(){if(!sel)return;const k='seasea_done_'+getUser();let d=[];try{d=JSON.parse(localStorage.getItem(k)||'[]')}catch(e){}if(d.indexOf(sel.id)<0)d.push(sel.id);localStorage.setItem(k,JSON.stringify(d));playDing();renderUser();draw();show(sel);sayCheer();}
 function visible(n){return (filter==='Tất cả'||n.subject===filter)&&(q===''||n.name.toLowerCase().includes(q)||(n.lessonTitle||'').toLowerCase().includes(q))}
-function resize(){const r=cv.getBoundingClientRect();cv.width=r.width*devicePixelRatio;cv.height=r.height*devicePixelRatio;ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);draw()}
+function resize(){const r=cv.getBoundingClientRect();cv.width=r.width*devicePixelRatio;cv.height=r.height*devicePixelRatio;ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);draw();}
 function draw(){
  if(!DATA)return;const W=cv.clientWidth,H=cv.clientHeight;ctx.clearRect(0,0,W,H);
- // fit 1000x1000 world to canvas, with pan/zoom
+ const tt=(performance.now()-t0)/1000;
+ // floating bubbles and stars
+ for(var i=0;i<14;i++){var bx=((i*173)%W), by=((tt*18+i*97)%(H+60))-30;ctx.beginPath();ctx.arc(bx,by,5+(i%3)*3,0,7);ctx.fillStyle='rgba(255,255,255,0.55)';ctx.fill();}
+ ctx.font='20px system-ui';for(var j=0;j<8;j++){var sx=((j*251)%W), sy=((tt*10+j*131)%(H+40))-20;ctx.fillText('⭐',sx,sy);}
  const s=Math.min(W,H)/1000*view.s, ox=(W-1000*s)/2+view.x, oy=(H-1000*s)/2+view.y;
  const X=x=>ox+x*s, Y=y=>oy+y*s;
- // edges
  const vis=new Map(DATA.nodes.filter(visible).map(n=>[n.id,n]));
- ctx.lineWidth=1;
+ ctx.lineWidth=1.5;
  for(const e of DATA.edges){if(!vis.has(e.from)||!vis.has(e.to))continue;const a=vis.get(e.from),b=vis.get(e.to);const hot=sel&&(sel.id===e.from||sel.id===e.to);
-  ctx.strokeStyle=hot?'#facc15':'rgba(148,163,184,0.28)';ctx.beginPath();ctx.moveTo(X(a.x),Y(a.y));ctx.lineTo(X(b.x),Y(b.y));ctx.stroke();}
- // nodes
+  ctx.strokeStyle=hot?'#ff7043':'rgba(255,255,255,0.75)';ctx.beginPath();ctx.moveTo(X(a.x),Y(a.y));ctx.lineTo(X(b.x),Y(b.y));ctx.stroke();}
  const done=doneSet();
- for(const n of vis.values()){const hot=sel&&sel.id===n.id;const r=hot?13:7+Math.min(6,n.degree*0.7);
-  ctx.beginPath();ctx.arc(X(n.x),Y(n.y),r,0,7);ctx.fillStyle=done.has(n.id)?'#22c55e':(DATA.colors[n.subject]||'#94a3b8');ctx.fill();
-  if(hot){ctx.lineWidth=3;ctx.strokeStyle='#fff';ctx.stroke();}
-  if(hot||n.degree>=6){ctx.fillStyle='#fff';ctx.font='13px system-ui';ctx.fillText(n.name,X(n.x)+r+4,Y(n.y)+4);}}
-}
-function show(n){sel=n;const done=doneSet();document.getElementById('pTitle').textContent=(done.has(n.id)?'✓ ':'')+n.name;
+ for(const n of vis.values()){const hot=sel&&sel.id===n.id;const pulse=Math.sin(tt*2+n.x*0.05+n.y*0.03)*2;const base=hot?14:8+Math.min(6,n.degree*0.7);
+  const r=base+pulse;const yy=Y(n.y)+Math.sin(tt*1.5+n.x*0.02)*2;
+  ctx.beginPath();ctx.arc(X(n.x),yy,r,0,7);ctx.fillStyle=done.has(n.id)?'#22c55e':(DATA.colors[n.subject]||'#94a3b8');ctx.fill();
+  ctx.lineWidth=3;ctx.strokeStyle='rgba(255,255,255,0.9)';ctx.stroke();
+  if(done.has(n.id)){ctx.fillStyle='#fff';ctx.font='bold 13px system-ui';ctx.fillText('✓',X(n.x)-4,yy+5);}
+  if(hot){ctx.fillStyle='#263238';ctx.font='bold 15px system-ui';ctx.fillText(n.name,X(n.x)+r+5,yy+5);}
+  else if(n.degree>=6){ctx.fillStyle='#263238';ctx.font='13px system-ui';ctx.fillText(n.name,X(n.x)+r+4,yy+4);}}
+ requestAnimationFrame(draw);}
+function show(n){sel=n;playPop();const done=doneSet();document.getElementById('pTitle').textContent=(done.has(n.id)?'⭐✓ ':'')+n.name;
  document.getElementById('pMeta').innerHTML='<span class="tag">'+n.subject+'</span><span class="tag">'+n.domain+'</span><span class="tag">'+n.age+'</span>';
  document.getElementById('pDesc').textContent=n.desc||'';
  const pre=DATA.edges.filter(e=>e.to===n.id).map(e=>DATA.nodes.find(x=>x.id===e.from)).filter(Boolean);
@@ -79,20 +119,22 @@ function show(n){sel=n;const done=doneSet();document.getElementById('pTitle').te
  document.getElementById('pLinks').innerHTML=h;
  const go=document.getElementById('pGo'),db=document.getElementById('doneBtn');
  if(n.chunk){go.href=n.chunk+'#'+n.lesson;go.className='big';go.textContent='Vào học: '+(n.lessonTitle||n.name)+' →';db.style.display='inline-block';}
- else{go.href='#';go.className='big disabled';go.textContent='Bài này chưa có hình, sẽ làm sau';db.style.display='none';}
- draw();}
+ else{go.href='#';go.className='big disabled';go.textContent='Bài này chưa có bài học, sẽ làm sau';db.style.display='none';}
+ sayCheer();}
 function pick(px,py){const W=cv.clientWidth,H=cv.clientHeight;const s=Math.min(W,H)/1000*view.s, ox=(W-1000*s)/2+view.x, oy=(H-1000*s)/2+view.y;
  let best=null,bd=1e9;for(const n of DATA.nodes.filter(visible)){const dx=px-(ox+n.x*s),dy=py-(oy+n.y*s),d=dx*dx+dy*dy;if(d<bd){bd=d;best=n;}}
  if(best&&bd<900)show(best);}
 cv.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,vx:view.x,vy:view.y,moved:false}});
-cv.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(Math.abs(dx)+Math.abs(dy)>4)drag.moved=true;view.x=drag.vx+dx;view.y=drag.vy+dy;draw();});
+cv.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(Math.abs(dx)+Math.abs(dy)>4)drag.moved=true;view.x=drag.vx+dx;view.y=drag.vy+dy;});
 addEventListener('pointerup',e=>{if(drag&&!drag.moved){const r=cv.getBoundingClientRect();pick(e.clientX-r.left,e.clientY-r.top);}drag=null;});
-cv.addEventListener('wheel',e=>{e.preventDefault();view.s=Math.max(0.6,Math.min(3,view.s*(e.deltaY<0?1.1:0.9)));draw();},{passive:false});
-document.getElementById('search').addEventListener('input',e=>{q=e.target.value.trim().toLowerCase();draw();});
+cv.addEventListener('wheel',e=>{e.preventDefault();view.s=Math.max(0.6,Math.min(3,view.s*(e.deltaY<0?1.1:0.9)));},{passive:false});
+document.getElementById('search').addEventListener('input',e=>{q=e.target.value.trim().toLowerCase();});
+var mg=document.getElementById('mascotGrid');
+MASCOTS.forEach(function(m){var d=document.createElement('div');d.className='mascotCard';d.innerHTML='<div class="emo">'+m.emo+'</div><b>'+m.name+'</b><small>'+m.note+'</small>';d.onclick=function(){chooseMascot(m.id);};mg.appendChild(d);});
 fetch('graph-data.json').then(r=>r.json()).then(d=>{DATA=d;
  const f=document.getElementById('filters');
- ['Tất cả',...d.subjects].forEach(s=>{const b=document.createElement('button');b.textContent=s;b.onclick=()=>{filter=s;[...f.children].forEach(x=>x.classList.remove('on'));b.classList.add('on');draw();};if(s==='Tất cả')b.classList.add('on');f.appendChild(b);});
- document.getElementById('legend').innerHTML='<b>Chú thích màu theo môn:</b> '+d.subjects.map(s=>'<i style="background:'+(d.colors[s]||'#94a3b8')+'"></i>'+s).join('')+'<br>Chấm to hơn là bài nối với nhiều bài khác. Đường vàng là đường nối của bài đang chọn.';
- renderUser();resize();});
+ ['Tất cả',...d.subjects].forEach(s=>{const b=document.createElement('button');b.textContent=s;b.onclick=()=>{filter=s;[...f.children].forEach(x=>x.classList.remove('on'));b.classList.add('on');};if(s==='Tất cả')b.classList.add('on');f.appendChild(b);});
+ document.getElementById('legend').innerHTML='<b>Chú thích màu theo môn:</b> '+d.subjects.map(s=>'<i style="background:'+(d.colors[s]||'#94a3b8')+'"></i>'+s).join('')+'<br>Chấm to hơn là bài nối với nhiều bài khác. Đường cam là đường nối của bài đang chọn. Chấm xanh lá có ✓ là bài bé đã thu thập sao.';
+ renderUser();renderMascot();renderMute();ensureMascot();resize();requestAnimationFrame(draw);});
 addEventListener('resize',resize);
 </script></body></html>
