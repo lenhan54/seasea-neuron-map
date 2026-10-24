@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bản đồ kiến thức của bé — seasea</title>
+<style>
+*{box-sizing:border-box} body{margin:0;background:#0b1026;color:#eef2ff;font-family:system-ui,-apple-system,sans-serif}
+header{padding:14px 16px 8px} h1{margin:0 0 6px;font-size:22px} p.sub{margin:0;color:#a5b4fc;font-size:14px;line-height:1.5}
+#userbox{background:#1e293b;border:1px solid #334155;border-radius:14px;padding:12px;margin:12px 16px}
+#userbox input{font-size:16px;padding:8px;border-radius:10px;border:1px solid #64748b;width:62%;background:#0f172a;color:#fff}
+button{font-size:15px;padding:8px 12px;margin:3px;border-radius:10px;border:1px solid #64748b;background:#1e293b;color:#fff;cursor:pointer}
+button.on{background:#4f46e5;border-color:#818cf8}
+#filters{padding:0 16px;display:flex;flex-wrap:wrap;gap:6px} #filters button{font-size:13px;padding:6px 10px}
+#search{margin:10px 16px 0;width:calc(100% - 32px);font-size:16px;padding:9px;border-radius:10px;border:1px solid #64748b;background:#0f172a;color:#fff}
+#wrap{position:relative;margin:12px 16px;border:1px solid #334155;border-radius:16px;overflow:hidden;background:radial-gradient(circle at 50% 30%,#16204d 0,#0b1026 70%)}
+canvas{display:block;width:100%;height:62vh;min-height:420px;touch-action:manipulation}
+#hint{position:absolute;left:10px;bottom:10px;background:rgba(15,23,42,.85);border:1px solid #334155;border-radius:10px;padding:6px 10px;font-size:13px;color:#cbd5e1}
+#panel{margin:0 16px 16px;background:#1e293b;border:1px solid #334155;border-radius:16px;padding:14px}
+#panel h2{margin:0 0 6px;font-size:19px} #panel p{margin:6px 0;line-height:1.55;color:#e2e8f0}
+#panel .tag{display:inline-block;background:#312e81;border-radius:8px;padding:2px 8px;margin-right:6px;font-size:13px}
+#panel a.big{display:inline-block;margin-top:8px;background:#4f46e5;color:#fff;text-decoration:none;padding:10px 16px;border-radius:12px;font-weight:600}
+#panel a.big.disabled{background:#475569;pointer-events:none}
+#legend{padding:0 16px 12px;font-size:13px;color:#cbd5e1;line-height:1.8}
+#legend i{display:inline-block;width:11px;height:11px;border-radius:50%;margin:0 4px 0 10px;vertical-align:middle}
+a{color:#a5b4fc} .foot{padding:0 16px 20px;color:#94a3b8;font-size:13px;line-height:1.6}
+</style></head><body>
+<header><h1>🌌 Bản đồ kiến thức của bé</h1>
+<p class="sub">Mỗi chấm là một bài học. Đường nối là kiến thức cần học trước. Bấm vào một chấm để xem bài đó, và xem nó nối với những bài nào. Dành cho bé 5 tuổi trước, các độ tuổi khác sẽ thêm vào cùng một bản đồ này.</p></header>
+<div id="userbox"><p id="greet" style="margin:0 0 8px"><b>Chào bé! Bé tên gì?</b></p>
+<input id="username" placeholder="Nhập tên của bé, ví dụ: An"><button onclick="saveUser()">Vào học</button><button onclick="changeUser()" id="changeBtn" style="display:none">Đổi tên</button>
+<p id="progress" style="margin:8px 0 0;color:#cbd5e1"></p>
+<p style="font-size:13px;color:#94a3b8;margin:8px 0 0">Tên chỉ lưu trên máy của bé, không gửi đi đâu, không cần mật khẩu hay email.</p></div>
+<div id="filters"></div>
+<input id="search" placeholder="Tìm bài học, ví dụ: nước, hình tròn, con vật…">
+<div id="wrap"><canvas id="cv"></canvas><div id="hint">Chạm vào một chấm để chọn • Kéo để xem quanh bản đồ • Dùng nút môn học để lọc</div></div>
+<div id="panel"><h2 id="pTitle">Chạm vào một chấm để bắt đầu</h2>
+<p id="pMeta"></p><p id="pDesc">Bản đồ có 347 bài cho bé 5 tuổi và 468 đường nối kiến thức cần học trước. Bài nào bé đã trả lời đúng sẽ hiện dấu ✓ và chấm chuyển màu xanh lá.</p>
+<p id="pLinks"></p><a id="pGo" class="big disabled" href="#">Vào học bài này →</a>
+<button onclick="markDone()" id="doneBtn" style="display:none">✓ Đánh dấu đã học xong</button></div>
+<div id="legend"></div>
+<p class="foot"><a href="list.html">Xem dạng danh sách cho phụ huynh →</a> • Bài học lấy từ Marble Skill Taxonomy v1, đã dịch sang tiếng Việt. Các độ tuổi lớn hơn sẽ thêm vào bản đồ này sau, không làm lại giao diện.</p>
+<script>
+let DATA=null, sel=null, filter='Tất cả', q='', view={x:0,y:0,s:1}, drag=null, lastTap=0;
+const cv=document.getElementById('cv'), ctx=cv.getContext('2d');
+function getUser(){return localStorage.getItem('seasea_user')||localStorage.getItem('harnessi_user')||''}
+function doneSet(){try{return new Set(JSON.parse(localStorage.getItem('seasea_done_'+getUser())||'[]'))}catch(e){return new Set()}}
+function saveUser(){const v=document.getElementById('username').value.trim();if(!v){alert('Bé nhập tên trước nhé!');return}localStorage.setItem('seasea_user',v);renderUser();draw()}
+function changeUser(){localStorage.removeItem('seasea_user');localStorage.removeItem('harnessi_user');renderUser();draw()}
+function renderUser(){const u=getUser(),g=document.getElementById('greet'),inp=document.getElementById('username'),ch=document.getElementById('changeBtn'),pr=document.getElementById('progress');
+ if(u){g.innerHTML='Xin chào, <b>'+u.replace(/</g,'&lt;')+'</b>!';inp.style.display='none';ch.style.display='inline-block';pr.textContent='Tiến độ của '+u+': '+doneSet().size+'/347 bài đã học xong.'}
+ else{g.innerHTML='<b>Chào bé! Bé tên gì?</b>';inp.style.display='inline-block';inp.value='';ch.style.display='none';pr.textContent='';}}
+function markDone(){if(!sel)return;const k='seasea_done_'+getUser();let d=[];try{d=JSON.parse(localStorage.getItem(k)||'[]')}catch(e){}if(d.indexOf(sel.id)<0)d.push(sel.id);localStorage.setItem(k,JSON.stringify(d));renderUser();draw();show(sel)}
+function visible(n){return (filter==='Tất cả'||n.subject===filter)&&(q===''||n.name.toLowerCase().includes(q)||(n.lessonTitle||'').toLowerCase().includes(q))}
+function resize(){const r=cv.getBoundingClientRect();cv.width=r.width*devicePixelRatio;cv.height=r.height*devicePixelRatio;ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);draw()}
+function draw(){
+ if(!DATA)return;const W=cv.clientWidth,H=cv.clientHeight;ctx.clearRect(0,0,W,H);
+ // fit 1000x1000 world to canvas, with pan/zoom
+ const s=Math.min(W,H)/1000*view.s, ox=(W-1000*s)/2+view.x, oy=(H-1000*s)/2+view.y;
+ const X=x=>ox+x*s, Y=y=>oy+y*s;
+ // edges
+ const vis=new Map(DATA.nodes.filter(visible).map(n=>[n.id,n]));
+ ctx.lineWidth=1;
+ for(const e of DATA.edges){if(!vis.has(e.from)||!vis.has(e.to))continue;const a=vis.get(e.from),b=vis.get(e.to);const hot=sel&&(sel.id===e.from||sel.id===e.to);
+  ctx.strokeStyle=hot?'#facc15':'rgba(148,163,184,0.28)';ctx.beginPath();ctx.moveTo(X(a.x),Y(a.y));ctx.lineTo(X(b.x),Y(b.y));ctx.stroke();}
+ // nodes
+ const done=doneSet();
+ for(const n of vis.values()){const hot=sel&&sel.id===n.id;const r=hot?13:7+Math.min(6,n.degree*0.7);
+  ctx.beginPath();ctx.arc(X(n.x),Y(n.y),r,0,7);ctx.fillStyle=done.has(n.id)?'#22c55e':(DATA.colors[n.subject]||'#94a3b8');ctx.fill();
+  if(hot){ctx.lineWidth=3;ctx.strokeStyle='#fff';ctx.stroke();}
+  if(hot||n.degree>=6){ctx.fillStyle='#fff';ctx.font='13px system-ui';ctx.fillText(n.name,X(n.x)+r+4,Y(n.y)+4);}}
+}
+function show(n){sel=n;const done=doneSet();document.getElementById('pTitle').textContent=(done.has(n.id)?'✓ ':'')+n.name;
+ document.getElementById('pMeta').innerHTML='<span class="tag">'+n.subject+'</span><span class="tag">'+n.domain+'</span><span class="tag">'+n.age+'</span>';
+ document.getElementById('pDesc').textContent=n.desc||'';
+ const pre=DATA.edges.filter(e=>e.to===n.id).map(e=>DATA.nodes.find(x=>x.id===e.from)).filter(Boolean);
+ const nxt=DATA.edges.filter(e=>e.from===n.id).map(e=>DATA.nodes.find(x=>x.id===e.to)).filter(Boolean);
+ let h='';
+ if(pre.length)h+='<b>Cần học trước:</b> '+pre.map(x=>x.name).join(', ')+'<br>';
+ if(nxt.length)h+='<b>Học xong bài này thì mở ra:</b> '+nxt.map(x=>x.name).join(', ');
+ if(!pre.length&&!nxt.length)h='Bài này chưa có đường nối nào trong nhóm tuổi 5, bé có thể học ngay.';
+ document.getElementById('pLinks').innerHTML=h;
+ const go=document.getElementById('pGo'),db=document.getElementById('doneBtn');
+ if(n.chunk){go.href=n.chunk+'#'+n.lesson;go.className='big';go.textContent='Vào học: '+(n.lessonTitle||n.name)+' →';db.style.display='inline-block';}
+ else{go.href='#';go.className='big disabled';go.textContent='Bài này chưa có hình, sẽ làm sau';db.style.display='none';}
+ draw();}
+function pick(px,py){const W=cv.clientWidth,H=cv.clientHeight;const s=Math.min(W,H)/1000*view.s, ox=(W-1000*s)/2+view.x, oy=(H-1000*s)/2+view.y;
+ let best=null,bd=1e9;for(const n of DATA.nodes.filter(visible)){const dx=px-(ox+n.x*s),dy=py-(oy+n.y*s),d=dx*dx+dy*dy;if(d<bd){bd=d;best=n;}}
+ if(best&&bd<900)show(best);}
+cv.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,vx:view.x,vy:view.y,moved:false}});
+cv.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(Math.abs(dx)+Math.abs(dy)>4)drag.moved=true;view.x=drag.vx+dx;view.y=drag.vy+dy;draw();});
+addEventListener('pointerup',e=>{if(drag&&!drag.moved){const r=cv.getBoundingClientRect();pick(e.clientX-r.left,e.clientY-r.top);}drag=null;});
+cv.addEventListener('wheel',e=>{e.preventDefault();view.s=Math.max(0.6,Math.min(3,view.s*(e.deltaY<0?1.1:0.9)));draw();},{passive:false});
+document.getElementById('search').addEventListener('input',e=>{q=e.target.value.trim().toLowerCase();draw();});
+fetch('graph-data.json').then(r=>r.json()).then(d=>{DATA=d;
+ const f=document.getElementById('filters');
+ ['Tất cả',...d.subjects].forEach(s=>{const b=document.createElement('button');b.textContent=s;b.onclick=()=>{filter=s;[...f.children].forEach(x=>x.classList.remove('on'));b.classList.add('on');draw();};if(s==='Tất cả')b.classList.add('on');f.appendChild(b);});
+ document.getElementById('legend').innerHTML='<b>Chú thích màu theo môn:</b> '+d.subjects.map(s=>'<i style="background:'+(d.colors[s]||'#94a3b8')+'"></i>'+s).join('')+'<br>Chấm to hơn là bài nối với nhiều bài khác. Đường vàng là đường nối của bài đang chọn.';
+ renderUser();resize();});
+addEventListener('resize',resize);
+</script></body></html>
